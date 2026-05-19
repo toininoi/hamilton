@@ -269,9 +269,11 @@ s=d.getElementsByTagName('script')[0];
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/load-data/">Loading data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/caching-tutorial/">Caching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/use-for-feature-engineering/">Feature engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how-tos/reuse-nodes/">Reusing functions and nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/ml-training/">Model training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/llm-workflows/">LLM workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/run-data-quality-checks/">Data quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how-tos/test-hamilton-code/">Testing Apache Hamilton code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/scale-up/">Scaling computation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/microservice/">Microservice</a></li>
@@ -530,7 +532,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.plugins.h_ray.</span></span><span class="sig-name descname"><span class="pre">RayGraphAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../result-builders/Generic/#hamilton.base.ResultMixin" title="hamilton.base.ResultMixin"><span class="pre">ResultMixin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ray_init_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shutdown_ray_on_completion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.plugins.h_ray.RayGraphAdapter" title="Link to this definition">¶</a></dt>
 <dd><p>Class representing what’s required to make Hamilton run on Ray.</p>
 <p>This walks the graph and translates it to run onto <a class="reference external" href="https://ray.io/">Ray</a>.</p>
-<p>Use <cite>pip install sf-hamilton[ray]</cite> to get the dependencies required to run this.</p>
+<p>Use <cite>pip install apache-hamilton[ray]</cite> to get the dependencies required to run this.</p>
 <p>Use this if:</p>
 <blockquote>
 <div><ul class="simple">

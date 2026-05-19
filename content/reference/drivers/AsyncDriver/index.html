@@ -269,9 +269,11 @@ s=d.getElementsByTagName('script')[0];
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/load-data/">Loading data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/caching-tutorial/">Caching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/use-for-feature-engineering/">Feature engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how-tos/reuse-nodes/">Reusing functions and nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/ml-training/">Model training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/llm-workflows/">LLM workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/run-data-quality-checks/">Data quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how-tos/test-hamilton-code/">Testing Apache Hamilton code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/scale-up/">Scaling computation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/microservice/">Microservice</a></li>
@@ -640,7 +642,7 @@ Note this does not support dynamic execution or materializers (for now).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.async_driver.Builder.build">
-<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.async_driver.Builder.build" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hamilton.async_driver.AsyncDriver" title="hamilton.async_driver.AsyncDriver"><span class="pre">AsyncDriver</span></a></span></span><a class="headerlink" href="#hamilton.async_driver.Builder.build" title="Link to this definition">¶</a></dt>
 <dd><p>Builds the async driver. This also initializes it, hence the async definition.
 If you don’t want to use async, you can use <cite>build_without_init</cite> and call <cite>ainit</cite> later,
 but we recommend using this in an asynchronous lifespan management function (E.G. in fastAPI),

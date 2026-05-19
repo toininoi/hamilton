@@ -269,9 +269,11 @@ s=d.getElementsByTagName('script')[0];
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/load-data/">Loading data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/caching-tutorial/">Caching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-for-feature-engineering/">Feature engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/reuse-nodes/">Reusing functions and nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/ml-training/">Model training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/llm-workflows/">LLM workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/run-data-quality-checks/">Data quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/test-hamilton-code/">Testing Apache Hamilton code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/scale-up/">Scaling computation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/microservice/">Microservice</a></li>
@@ -879,6 +881,10 @@ was read and written.</p>
 <li><p>Observability ✅: Loaders and savers are part of the dataflow. You can view them with <code class="docutils literal notranslate"><span class="pre">Driver.display_all_functions()</span></code> and execute nodes by requesting them with <code class="docutils literal notranslate"><span class="pre">Driver.execute()</span></code>.</p></li>
 <li><p>Flexibility ✅: The loading and saving behavior is decoupled from the dataflow and can modified easily when creating the <code class="docutils literal notranslate"><span class="pre">Driver</span></code> and executing code.</p></li>
 </ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">from_</span></code> data loaders can be specified as optional with <code class="docutils literal notranslate"><span class="pre">optional=True</span></code>. This allows specified data loaders to be skipped rather than raise an exception when not referenced by a dataflow.</p>
+</div>
 </section>
 <section id="dynamic-materializers">
 <h3>Dynamic materializers<a class="headerlink" href="#dynamic-materializers" title="Link to this heading">¶</a></h3>

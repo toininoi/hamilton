@@ -1,0 +1,885 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex/"><link rel="search" title="Search" href="../../search/"><link rel="next" title="Model training" href="../ml-training/"><link rel="prev" title="Feature engineering" href="../use-for-feature-engineering/">
+        <link rel="canonical" href="https://hamilton.apache.org/how-tos/reuse-nodes/">
+
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>Reusing functions and nodes - Hamilton</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/testimonials.css?v=bd684830" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=a33697e8" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+      }
+    }
+  }
+</style>
+
+<!-- Matomo -->
+<script>
+  var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(["setDoNotTrack", true]);
+  _paq.push(["disableCookies"]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="https://analytics.apache.org/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '87']);
+    var d=document, g=d.createElement('script'),
+s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     📢 Announcing the <a target="_blank" href="https://www.meetup.com/global-hamilton-open-source-user-group-meetup/">Hamilton Meetup Group</a>. Sign up to attend events! 📢 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../"><div class="brand">Hamilton</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../">
+  
+  <span class="sidebar-brand-text">Hamilton</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search/" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">USER GUIDE</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../get-started/">Get Started</a><input aria-label="Toggle navigation of Get Started" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/why-hamilton/">Why use Apache Hamilton?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/install/">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/your-first-dataflow/">Your First Dataflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/learning-resources/">Learning Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/contributing/">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/license/">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../concepts/">Concepts</a><input aria-label="Toggle navigation of Concepts" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/glossary/">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/node/">Functions, nodes &amp; dataflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/driver/">Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/visualization/">Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/materialization/">Materialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/function-modifiers/">Function modifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/builder/">Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/caching/">Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/function-modifiers-advanced/">Function modifiers (Advanced)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/parallel-task/">Dynamic DAGs/Parallel Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/">UI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#local-mode">Local Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#docker-deployed-mode">Docker/Deployed Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#get-started">Get started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#sdk-configuration">SDK Configuration</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../concepts/best-practices/">Best Practices</a><input aria-label="Toggle navigation of Best Practices" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/function-naming/">Function Naming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/migrating-to-hamilton/">Migrating to Apache Hamilton</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/code-organization/">Code Organization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/common-indices/">Common Indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/output-immutability/">Output Immutability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/using-within-your-etl-system/">Using within your ETL System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/loading-data/">Loading Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../">User Guide</a><input aria-label="Toggle navigation of User Guide" checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../use-in-jupyter-notebook/">Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../load-data/">Loading data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../caching-tutorial/">Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../use-for-feature-engineering/">Feature engineering</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Reusing functions and nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ml-training/">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../llm-workflows/">LLM workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../run-data-quality-checks/">Data quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test-hamilton-code/">Testing Apache Hamilton code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../scale-up/">Scaling computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../microservice/">Microservice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extensions-autoloading/">Extension autoloading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../wrapping-driver/">Wrapping the Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli-reference/">Command line interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pre-commit-hooks/">pre-commit hooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../hamilton-ui/">Apache Hamilton UI</a><input aria-label="Toggle navigation of Apache Hamilton UI" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/">UI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#local-mode">Local Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#docker-deployed-mode">Docker/Deployed Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#get-started">Get started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#sdk-configuration">SDK Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../hamilton-vscode/">IDE extension</a><input aria-label="Toggle navigation of IDE extension" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-vscode/vscode_extension/">Apache Hamilton VSCode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-vscode/language_server/">Language Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../integrations/">Integrations</a><input aria-label="Toggle navigation of Integrations" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/dlt/">dlt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/fastapi/">FastAPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/ibis/">Ibis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/streamlit/">Streamlit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/dbt/">dbt</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/mlflow">MLFlow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/airflow">Airflow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/aws">Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/image_telephone">Burr</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/dagster">Dagster</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/dask">Dask</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/feast">Feast</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/outerbounds/hamilton-metaflow">Metaflow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/data_quality/pandera">Pandera</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/plotly">Plotly</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/polars">Polars</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/prefect">Prefect</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/ray">Ray</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/slack">Slack</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/spark">Spark</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/vaex">Vaex</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/narwhals">Narwhals</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/openlineage">OpenLineage</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../code-comparisons/">Code Comparisons</a><input aria-label="Toggle navigation of Code Comparisons" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/kedro/">Kedro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/dagster/">Dagster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/langchain/">LangChain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/airflow/">Airflow</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">DOWNLOADS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../asf/downloads/">Downloads</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">PDF</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://hamilton.apache.org/_static/Hamilton.pdf">PDF</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">COMMUNITY</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../community/">Meet-ups</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../ecosystem/">Ecosystem</a><input aria-label="Toggle navigation of Ecosystem" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../ecosystem/claude-code-plugin/">Claude Code Plugin for Hamilton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ecosystem/mcp-server/">MCP Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/apache/hamilton">GitHub</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://www.tryhamilton.dev/">tryhamilton.dev</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/decorators/">Decorators</a><input aria-label="Toggle navigation of Decorators" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/check_output/">check_output*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/config_when/">config.when*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/dataloader/">dataloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/datasaver/">datasaver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/does/">does</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/unpack_fields/">unpack_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/extract_columns/">extract_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/extract_fields/">extract_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/inject/">inject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/load_from/">load_from</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize/">parameterize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_extract_columns/">parameterize_extract_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_frame/">parameterize_frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_sources/">parameterize_sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_subdag/">parameterized_subdag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_values/">parameterize_values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/pipe/">pipe family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/resolve/">resolve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/save_to/">save_to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/subdag/">subdag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/schema/">schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/tag/">tag*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/with_columns/">with_columns</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/drivers/">Drivers</a><input aria-label="Toggle navigation of Drivers" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/">Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/#driver">Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/#defaultgraphexecutor">DefaultGraphExecutor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/#taskbasedgraphexecutor">TaskBasedGraphExecutor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/AsyncDriver/">AsyncDriver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Custom/">Custom Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/caching/">Caching</a><input aria-label="Toggle navigation of Caching" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/caching/caching-logic/">Caching logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/caching/data-versioning/">Data versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/caching/stores/">Stores</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/graph-adapters/">GraphAdapters</a><input aria-label="Toggle navigation of GraphAdapters" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/SimplePythonDataFrameGraphAdapter/">SimplePythonDataFrameGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/SimplePythonGraphAdapter/">SimplePythonGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/HamiltonGraphAdapter/">HamiltonGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/AsyncGraphAdapter/">h_async.AsyncGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/ThreadPoolFutureAdapter/">h_threadpool.FutureAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/CachingGraphAdapter/">CachingGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/DaskGraphAdapter/">h_dask.DaskGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/PySparkUDFGraphAdapter/">h_spark.PySparkUDFGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/RayGraphAdapter/">h_ray.RayGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/SparkKoalasGraphAdapter/">h_spark.SparkKoalasGraphAdapter</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/lifecycle-hooks/">Lifecycle Adapters</a><input aria-label="Toggle navigation of Lifecycle Adapters" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/ResultBuilder/">lifecycle.ResultBuilder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/LegacyResultMixin/">lifecycle.LegacyResultMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GraphAdapter/">lifecycle.api.GraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/NodeExecutionHook/">lifecycle.NodeExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GraphExecutionHook/">lifecycle.api.GraphExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/EdgeConnectionHook/">lifecycle.api.EdgeConnectionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/NodeExecutionMethod/">lifecycle.api.NodeExecutionMethod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/StaticValidator/">lifecycle.api.StaticValidator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GraphConstructionHook/">lifecycle.api.GraphConstructionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskSubmissionHook/">lifecycle.api.TaskSubmissionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskReturnHook/">lifecycle.api.TaskReturnHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskExecutionHook/">lifecycle.api.TaskExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskGroupingHook/">lifecycle.api.TaskGroupingHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/PDBDebugger/">lifecycle.PDBDebugger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/PrintLn/">lifecycle.PrintLn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/ProgressBar/">plugins.h_tqdm.ProgressBar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/RichProgressBar/">plugins.h_rich.RichProgressBar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/DDOGTracer/">plugins.h_ddog.DDOGTracer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/FunctionInputOutputTypeChecker/">lifecycle.FunctionInputOutputTypeChecker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/SlackNotifierHook/">plugins.h_slack.SlackNotifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GracefulErrorAdapter/">lifecycle.GracefulErrorAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/SparkInputValidator/">plugins.h_spark.SparkInputValidator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/Narwhals/">plugins.h_narhwals.NarwhalsAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/Narwhals/#plugins-h-narhwals-narwhalsdataframeresultbuilder">plugins.h_narhwals.NarwhalsDataFrameResultBuilder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/MLFlowTracker/">plugins.h_mlflow.MLFlowTracker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/NoEdgeAndInputTypeChecking/">lifecycle.NoEdgeAndInputTypeChecking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/OpenLineageAdapter/">plugins.h_openlineage.OpenLineageAdapter</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/result-builders/">ResultBuilders</a><input aria-label="Toggle navigation of ResultBuilders" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Generic/">Generic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Numpy/">Numpy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Pandas/">Pandas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Polars/">Polars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Dask/">Dask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/PyArrow/">plugins.h_pyarrow.PyarrowTableResult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Custom/">Custom ResultBuilder</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/io/">I/O</a><input aria-label="Toggle navigation of I/O" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/available-data-adapters/">Using Data Adapters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/available-data-adapters/#data-loaders">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/available-data-adapters/#data-savers">Data Savers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/adapter-documentation/">Data Adapters</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/dataflows/">Dataflows</a><input aria-label="Toggle navigation of Dataflows" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/clear_storage/">clear_storage()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/copy/">copy()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/find/">find()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/import_module/">import_module()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/inspect/">inspect()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/inspect_module/">inspect_module()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/install_dependencies_string/">install_dependencies_string()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/latest_commit/">latest_commit()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/list/">list()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/pull_module/">pull_module()</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ASF</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../asf/">ASF</a><input aria-label="Toggle navigation of ASF" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../asf/downloads/">Downloads</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/">Apache Software Foundation</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/licenses/">License</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/events/current-event.html">Events</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/security/">Security</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/foundation/thanks.html">Thanks</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/foundation/policies/conduct.html">Code of Conduct</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/blob/main/docs/how-tos/reuse-nodes.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/edit/main/docs/how-tos/reuse-nodes.rst" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="reusing-functions-and-nodes">
+<h1>Reusing functions and nodes<a class="headerlink" href="#reusing-functions-and-nodes" title="Link to this heading">¶</a></h1>
+<p>A common question on <a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a>:
+<em>“I want to run the same logic for several regions / datasets / model variants
+– what is the Hamilton way?”</em> Hamilton has four answers, and the right one
+depends on how the variation is shaped.</p>
+<p>This page walks through them in order from simplest to most advanced:</p>
+<ol class="arabic simple">
+<li><p><strong>Reuse a function module across multiple Drivers</strong> – the data is what
+varies, the dataflow is the same.</p></li>
+<li><p><strong>Override a module with another that has the same function names</strong> –
+one or two specific functions need to be swapped (e.g. for testing or for a
+different runtime context).</p></li>
+<li><p><strong>Use</strong> <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> – you want the <em>same</em> transformation graph evaluated
+several times <em>inside one Driver</em>, with different inputs or config.</p></li>
+<li><p><strong>Use</strong> <code class="docutils literal notranslate"><span class="pre">&#64;parameterized_subdag</span></code> – the variation is large enough that
+writing one <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> per case becomes tedious. (Advanced.)</p></li>
+</ol>
+<p>Every code sample below is taken from a runnable example in the
+<a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples">examples folder</a>, so
+you can copy any of them, run them locally, and adapt them.</p>
+<section id="reuse-a-function-module-across-multiple-drivers">
+<h2>1. Reuse a function module across multiple Drivers<a class="headerlink" href="#reuse-a-function-module-across-multiple-drivers" title="Link to this heading">¶</a></h2>
+<p>If the <em>dataflow</em> is the same and only the <em>data</em> changes, you do not need
+any decorator – you just import the function module and build a Driver
+wherever you need one. This is the most common form of reuse and the one to
+reach for first.</p>
+<p>The
+<a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/feature_engineering/feature_engineering_multiple_contexts">feature_engineering_multiple_contexts</a>
+example shows this pattern across an offline ETL and an online FastAPI
+service: <code class="docutils literal notranslate"><span class="pre">features.py</span></code> is written <strong>once</strong>, then driven from two contexts.
+The offline ETL builds a Driver and executes it on a batch of rows; the
+online server builds another Driver from the same module and executes it
+per-request.</p>
+<p>When to reach for this pattern:</p>
+<ul class="simple">
+<li><p>The same feature definitions need to run in batch <em>and</em> in a request
+handler.</p></li>
+<li><p>You want to share code between training and inference.</p></li>
+<li><p>You want different teams to consume the same canonical module with their
+own inputs.</p></li>
+</ul>
+<p>What you do <em>not</em> need: any Hamilton-specific decorator. The reuse is just
+ordinary Python imports plus building a Driver per context.</p>
+</section>
+<section id="override-a-module-to-swap-same-named-functions">
+<h2>2. Override a module to swap same-named functions<a class="headerlink" href="#override-a-module-to-swap-same-named-functions" title="Link to this heading">¶</a></h2>
+<p>Sometimes you want most of a dataflow to stay the same and only swap one
+or two functions – for example, replacing a real data loader with a mock
+one in tests, or switching between two implementations of the same business
+rule.</p>
+<p>By default Hamilton refuses to build a DAG when two modules define
+functions with the same name, because the resulting graph would be
+ambiguous. The
+<a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/module_overrides">module_overrides</a>
+example shows how to opt in to a “later wins” rule with
+<code class="docutils literal notranslate"><span class="pre">Builder.allow_module_overrides()</span></code>:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/module_overrides/module_a.py</span></code></span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;This is module a.&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/module_overrides/module_b.py</span></code></span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;This is module b.&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/module_overrides/run.py</span></code></span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">module_a</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">module_b</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span>
+            <span class="n">module_a</span><span class="p">,</span>
+            <span class="n">module_b</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">allow_module_overrides</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;builder: &quot;</span><span class="p">,</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">{},</span> <span class="n">final_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">allow_module_overrides()</span></code> is set, the function from the
+<strong>later-imported</strong> module wins, so the example above prints
+<code class="docutils literal notranslate"><span class="pre">&quot;This</span> <span class="pre">is</span> <span class="pre">module</span> <span class="pre">b.&quot;</span></code>.</p>
+<p>When to reach for this pattern:</p>
+<ul class="simple">
+<li><p>You have a stable dataflow but want a small, well-named seam for swapping
+in a test double, a mock data source, or an environment-specific function.</p></li>
+<li><p>You want the swap to be visible in the Driver-construction code, rather
+than buried inside a function or a config flag.</p></li>
+</ul>
+<p>When <em>not</em> to reach for this pattern:</p>
+<ul class="simple">
+<li><p>If many functions need to vary, prefer keeping the variations in distinct
+modules and choosing which one to import. Module overrides are best as a
+surgical tool.</p></li>
+</ul>
+</section>
+<section id="subdag-repeat-the-same-transform-inside-one-driver">
+<h2>3. <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> – repeat the same transform inside one Driver<a class="headerlink" href="#subdag-repeat-the-same-transform-inside-one-driver" title="Link to this heading">¶</a></h2>
+<p>Sometimes you want the <em>same</em> transformation graph evaluated several times
+<em>inside the same DAG</em>, each time with a different input or configuration –
+for example, computing unique-user counts at daily / weekly / monthly grains
+across two regions.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> decorator from <code class="docutils literal notranslate"><span class="pre">hamilton.function_modifiers</span></code> does this
+declaratively. From the source documentation:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> enables you to rerun components of your DAG with varying
+parameters. That is, it enables you to “chain” what you could express
+with a Driver into a single DAG.</p>
+</div></blockquote>
+<p>The
+<a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/reusing_functions">reusing_functions</a>
+example computes <code class="docutils literal notranslate"><span class="pre">unique_users</span></code> for two regions and three time grains.
+The shared logic lives in <code class="docutils literal notranslate"><span class="pre">unique_users.py</span></code>:</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/reusing_functions/unique_users.py</span></code></span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">_grain_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;day&quot;</span><span class="p">:</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;week&quot;</span><span class="p">:</span> <span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;month&quot;</span><span class="p">:</span> <span class="s2">&quot;M&quot;</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_grain</span><span class="p">(</span><span class="n">grain</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">grain</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">,</span> <span class="s2">&quot;week&quot;</span><span class="p">,</span> <span class="s2">&quot;month&quot;</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">filtered_interactions</span><span class="p">(</span><span class="n">website_interactions</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">region</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">website_interactions</span><span class="p">[</span><span class="n">website_interactions</span><span class="o">.</span><span class="n">region</span> <span class="o">==</span> <span class="n">region</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">unique_users</span><span class="p">(</span><span class="n">filtered_interactions</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">grain</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gives the number of shares traded by the frequency&quot;&quot;&quot;</span>
+    <span class="n">_validate_grain</span><span class="p">(</span><span class="n">grain</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">filtered_interactions</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">_grain_mapping</span><span class="p">[</span><span class="n">grain</span><span class="p">])[</span><span class="s2">&quot;user_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Then in <code class="docutils literal notranslate"><span class="pre">reusable_subdags.py</span></code>, each <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> declaration creates one
+named instance of that subgraph, with its own <code class="docutils literal notranslate"><span class="pre">inputs</span></code> and <code class="docutils literal notranslate"><span class="pre">config</span></code>:</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">One &#64;subdag invocation from <code class="docutils literal notranslate"><span class="pre">examples/reusing_functions/reusable_subdags.py</span></code></span><a class="headerlink" href="#id8" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@subdag</span><span class="p">(</span>
+    <span class="n">unique_users</span><span class="p">,</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;grain&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;day&quot;</span><span class="p">)},</span>
+    <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;US&quot;</span><span class="p">},</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">daily_unique_users_US</span><span class="p">(</span><span class="n">unique_users</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">unique_users</span>
+</pre></div>
+</div>
+</div>
+<p>Each decorated function:</p>
+<ul class="simple">
+<li><p>Takes the <em>output</em> of its sub-DAG as its argument. Above, the sub-DAG ends
+in <code class="docutils literal notranslate"><span class="pre">unique_users</span></code>, so the wrapping function receives <code class="docutils literal notranslate"><span class="pre">unique_users:</span>
+<span class="pre">pd.Series</span></code> and returns it (perhaps after post-processing).</p></li>
+<li><p>Receives <code class="docutils literal notranslate"><span class="pre">inputs={&quot;grain&quot;:</span> <span class="pre">value(&quot;day&quot;)}</span></code> – this binds the sub-DAG
+input <code class="docutils literal notranslate"><span class="pre">grain</span></code> to the literal <code class="docutils literal notranslate"><span class="pre">&quot;day&quot;</span></code> for <em>this instance only</em>.</p></li>
+<li><p>Receives <code class="docutils literal notranslate"><span class="pre">config={&quot;region&quot;:</span> <span class="pre">&quot;US&quot;}</span></code> – this scopes Hamilton’s
+<code class="docutils literal notranslate"><span class="pre">&#64;config.when</span></code> selection to <code class="docutils literal notranslate"><span class="pre">&quot;US&quot;</span></code> for this sub-DAG.</p></li>
+</ul>
+<p>The same module then defines five more analogous functions (<code class="docutils literal notranslate"><span class="pre">weekly_*</span></code>,
+<code class="docutils literal notranslate"><span class="pre">monthly_*</span></code>, the <code class="docutils literal notranslate"><span class="pre">CA</span></code> variants), giving twelve nodes that all reuse the
+same underlying definitions.</p>
+<p>Two parameters worth knowing:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">namespace</span></code> – a string prefix for the nodes that <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> materialises.
+By default Hamilton uses the wrapping function’s name, which is normally
+what you want.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">external_inputs</span></code> – declare any function parameter that comes from
+<em>outside</em> the sub-DAG (e.g. from the surrounding DAG). This makes the
+boundary between the sub-DAG and its surroundings explicit.</p></li>
+</ul>
+<p>When to reach for this pattern:</p>
+<ul class="simple">
+<li><p>You want one Driver, one visualised DAG, and one <code class="docutils literal notranslate"><span class="pre">execute</span></code> call to
+produce all the variants – rather than a Python <code class="docutils literal notranslate"><span class="pre">for</span></code> loop over many
+Drivers in your application code.</p></li>
+<li><p>You want lineage and execution metadata for every variant captured by
+Hamilton, not by a wrapper script.</p></li>
+</ul>
+</section>
+<section id="parameterized-subdag-many-subdags-at-once-advanced">
+<h2>4. <code class="docutils literal notranslate"><span class="pre">&#64;parameterized_subdag</span></code> – many subdags at once (advanced)<a class="headerlink" href="#parameterized-subdag-many-subdags-at-once-advanced" title="Link to this heading">¶</a></h2>
+<p>If you have <em>many</em> subdags that differ only along a small number of
+parameters, writing one <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> declaration per case becomes verbose.
+<code class="docutils literal notranslate"><span class="pre">&#64;parameterized_subdag</span></code> is syntactic sugar that produces several subdags
+from a single decorator – analogous to how <code class="docutils literal notranslate"><span class="pre">&#64;parameterize</span></code> produces
+several nodes from one function.</p>
+<p>From the
+<a class="reference external" href="https://github.com/apache/hamilton/blob/main/hamilton/function_modifiers/recursive.py">source documentation</a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@parameterized_subdag</span><span class="p">(</span>
+    <span class="n">feature_modules</span><span class="p">,</span>
+    <span class="n">from_datasource_1</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;datasource_1.csv&quot;</span><span class="p">)}},</span>
+    <span class="n">from_datasource_2</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;datasource_2.csv&quot;</span><span class="p">)}},</span>
+    <span class="n">from_datasource_3</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;datasource_3.csv&quot;</span><span class="p">)},</span>
+        <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;filter&quot;</span><span class="p">:</span> <span class="s2">&quot;only_even_client_ids&quot;</span><span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">feature_engineering</span><span class="p">(</span><span class="n">feature_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">feature_df</span>
+</pre></div>
+</div>
+<p>Each entry below the decorator becomes one subdag, all built from the same
+<code class="docutils literal notranslate"><span class="pre">feature_modules</span></code> but with different inputs / config.</p>
+<p>The Hamilton source itself includes a deliberate warning on this decorator:</p>
+<blockquote>
+<div><p>Think about whether this feature is really the one you want – often
+times, verbose, static DAGs are far more readable than very concise,
+highly parameterized DAGs.</p>
+</div></blockquote>
+<p>In practice: prefer the explicit form from section 3 until the repetition
+genuinely hurts. Reach for <code class="docutils literal notranslate"><span class="pre">&#64;parameterized_subdag</span></code> when the parameter
+list comes from elsewhere (e.g. a config file resolved with <code class="docutils literal notranslate"><span class="pre">&#64;resolve</span></code>)
+or when you have a dozen-plus near-identical subdags.</p>
+<p>The full reference for both decorators lives at:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../reference/decorators/subdag/"><span class="doc">subdag</span></a></p></li>
+<li><p><a class="reference internal" href="../../reference/decorators/parameterize_subdag/"><span class="doc">parameterized_subdag</span></a></p></li>
+</ul>
+</section>
+<section id="choosing-between-the-four-patterns">
+<h2>Choosing between the four patterns<a class="headerlink" href="#choosing-between-the-four-patterns" title="Link to this heading">¶</a></h2>
+<p>A short decision tree:</p>
+<ul class="simple">
+<li><p><strong>The data varies, the code does not</strong> → just build another Driver from
+the same module (section 1).</p></li>
+<li><p><strong>One or two named functions need to be swapped</strong> → put the swaps in
+another module and use <code class="docutils literal notranslate"><span class="pre">allow_module_overrides()</span></code> (section 2).</p></li>
+<li><p><strong>You want N copies of the same transform graph in one DAG</strong> → use
+<code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> (section 3).</p></li>
+<li><p><strong>You have many copies and the parameter list is itself data</strong> → consider
+<code class="docutils literal notranslate"><span class="pre">&#64;parameterized_subdag</span></code> (section 4).</p></li>
+</ul>
+<p>In practice, most production Hamilton projects rely heavily on (1), use (2)
+sparingly for testing seams, reach for (3) when modeling per-segment or
+per-grain pipelines, and treat (4) as an advanced tool.</p>
+</section>
+<section id="where-to-go-from-here">
+<h2>Where to go from here<a class="headerlink" href="#where-to-go-from-here" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Walk through the runnable examples linked above:
+<a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/feature_engineering/feature_engineering_multiple_contexts">feature_engineering_multiple_contexts</a>,
+<a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/module_overrides">module_overrides</a>,
+and
+<a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/reusing_functions">reusing_functions</a>.</p></li>
+<li><p>Read <a class="reference internal" href="../../concepts/best-practices/code-organization/"><span class="doc">Code Organization</span></a> for the module
+layout that makes these patterns natural.</p></li>
+<li><p>For an end-to-end deep-dive on subdags and reuse, see the
+<a class="reference external" href="https://github.com/DAGWorks-Inc/hamilton-tutorials/blob/main/2024-03-19/march-meetup.ipynb">Hamilton March 2024 Meetup tutorial notebook</a>.</p></li>
+</ul>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../ml-training/">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Model training</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../use-for-feature-engineering/">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Feature engineering</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; The Apache Software Foundation, Licensed under the Apache License, Version 2.0.
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link " href="https://incubator.apache.org/" aria-label="Apache Stuff">
+<div class="apache-footer">
+    <img width="200" src="/_static/apache-incubator-logo.svg" alt="Apache Incubator Logo" class="apache-incubator-logo">
+    <div class="apache-notice">
+        <p>Apache Hamilton is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.</p>
+    </div>
+    <div class="apache-copyright">
+        <p>Apache, the names of Apache projects, and the feather logo are either registered trademarks or trademarks of the Apache Software Foundation in the United States and/or other countries.</p>
+    </div>
+</div>
+</a>
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Reusing functions and nodes</a><ul>
+<li><a class="reference internal" href="#reuse-a-function-module-across-multiple-drivers">1. Reuse a function module across multiple Drivers</a></li>
+<li><a class="reference internal" href="#override-a-module-to-swap-same-named-functions">2. Override a module to swap same-named functions</a></li>
+<li><a class="reference internal" href="#subdag-repeat-the-same-transform-inside-one-driver">3. <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> – repeat the same transform inside one Driver</a></li>
+<li><a class="reference internal" href="#parameterized-subdag-many-subdags-at-once-advanced">4. <code class="docutils literal notranslate"><span class="pre">&#64;parameterized_subdag</span></code> – many subdags at once (advanced)</a></li>
+<li><a class="reference internal" href="#choosing-between-the-four-patterns">Choosing between the four patterns</a></li>
+<li><a class="reference internal" href="#where-to-go-from-here">Where to go from here</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=187304be"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

@@ -269,9 +269,11 @@ s=d.getElementsByTagName('script')[0];
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/load-data/">Loading data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/caching-tutorial/">Caching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-for-feature-engineering/">Feature engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/reuse-nodes/">Reusing functions and nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/ml-training/">Model training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/llm-workflows/">LLM workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/run-data-quality-checks/">Data quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/test-hamilton-code/">Testing Apache Hamilton code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/scale-up/">Scaling computation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-tos/microservice/">Microservice</a></li>
@@ -542,7 +544,7 @@ The UI consists of the following features:</p>
 <section id="local-mode">
 <h1>Local Mode<a class="headerlink" href="#local-mode" title="Link to this heading">¶</a></h1>
 <p>To run the hamilton UI in local mode, you can do the following:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;sf-hamilton[ui,sdk]&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;apache-hamilton[ui,sdk]&quot;</span>
 hamilton<span class="w"> </span>ui
 <span class="c1"># python -m hamilton.cli.__main__ ui # on windows</span>
 </pre></div>
@@ -629,7 +631,7 @@ chart contribution!</p>
 <p>Now that you have your server running, you can run a simple dataflow and watch it in the UI!
 You can follow instructions in the UI when you create a new project, or follow the instructions here.</p>
 <p>First, install the SDK:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;sf-hamilton[sdk]&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;apache-hamilton[sdk]&quot;</span>
 </pre></div>
 </div>
 <p>Then, navigate to the project page (dashboard/projects), in the running UI, and click the green <code class="docutils literal notranslate"><span class="pre">+</span> <span class="pre">New</span> <span class="pre">DAG</span></code> button.</p>

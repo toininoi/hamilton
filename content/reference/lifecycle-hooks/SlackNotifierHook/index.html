@@ -269,9 +269,11 @@ s=d.getElementsByTagName('script')[0];
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/load-data/">Loading data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/caching-tutorial/">Caching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/use-for-feature-engineering/">Feature engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how-tos/reuse-nodes/">Reusing functions and nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/ml-training/">Model training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/llm-workflows/">LLM workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/run-data-quality-checks/">Data quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how-tos/test-hamilton-code/">Testing Apache Hamilton code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/scale-up/">Scaling computation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/microservice/">Microservice</a></li>
@@ -525,14 +527,14 @@ s=d.getElementsByTagName('script')[0];
           <section id="plugins-h-slack-slacknotifier">
 <h1>plugins.h_slack.SlackNotifier<a class="headerlink" href="#plugins-h-slack-slacknotifier" title="Link to this heading">¶</a></h1>
 <p>Provides a Slack notifier for Apache Hamilton execution. Must have <cite>slack_sdk</cite> installed to use it:</p>
-<p><cite>pip install sf-hamilton[slack]</cite> (use quotes if using zsh)</p>
+<p><cite>pip install apache-hamilton[slack]</cite> (use quotes if using zsh)</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="hamilton.plugins.h_slack.SlackNotifier">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.plugins.h_slack.</span></span><span class="sig-name descname"><span class="pre">SlackNotifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.plugins.h_slack.SlackNotifier" title="Link to this definition">¶</a></dt>
 <dd><p>This is a adapter that sends a message to a slack channel when a node is executed &amp; fails.</p>
 <p>Note: you need to have slack_sdk installed for this to work.
 If you don’t have it installed, you can install it with <cite>pip install slack_sdk</cite>
-(or <cite>pip install sf-hamilton[slack]</cite> – use quotes if you’re using zsh).</p>
+(or <cite>pip install apache-hamilton[slack]</cite> – use quotes if you’re using zsh).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.plugins</span><span class="w"> </span><span class="kn">import</span> <span class="n">h_slack</span>
 
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>

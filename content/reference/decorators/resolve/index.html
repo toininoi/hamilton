@@ -269,9 +269,11 @@ s=d.getElementsByTagName('script')[0];
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/load-data/">Loading data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/caching-tutorial/">Caching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/use-for-feature-engineering/">Feature engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how-tos/reuse-nodes/">Reusing functions and nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/ml-training/">Model training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/llm-workflows/">LLM workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/run-data-quality-checks/">Data quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how-tos/test-hamilton-code/">Testing Apache Hamilton code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/scale-up/">Scaling computation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/microservice/">Microservice</a></li>
@@ -537,7 +539,7 @@ driver.</p>
 configuration time. Say, for example, we want to add two series, and we need to pass the set of
 series to add as a configuration parameter, as we’ll be changing it regularly. Without this,
 you would have to have them as part of the same dataframe. E.G.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@parameterize_values</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@parameterize_sources</span><span class="p">(</span>
     <span class="n">series_sum_1</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="s2">&quot;series_1&quot;</span><span class="p">,</span> <span class="s2">&quot;s2&quot;</span><span class="p">:</span> <span class="s2">&quot;series_2&quot;</span><span class="p">},</span>
     <span class="n">series_sum_2</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="s2">&quot;series_3&quot;</span><span class="p">,</span> <span class="s2">&quot;s2&quot;</span><span class="p">:</span> <span class="s2">&quot;series_4&quot;</span><span class="p">},</span>
 <span class="p">)</span>

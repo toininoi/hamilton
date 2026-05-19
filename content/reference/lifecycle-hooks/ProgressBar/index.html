@@ -269,9 +269,11 @@ s=d.getElementsByTagName('script')[0];
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/load-data/">Loading data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/caching-tutorial/">Caching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/use-for-feature-engineering/">Feature engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how-tos/reuse-nodes/">Reusing functions and nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/ml-training/">Model training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/llm-workflows/">LLM workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/run-data-quality-checks/">Data quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how-tos/test-hamilton-code/">Testing Apache Hamilton code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/scale-up/">Scaling computation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/microservice/">Microservice</a></li>
@@ -525,14 +527,14 @@ s=d.getElementsByTagName('script')[0];
           <section id="plugins-h-tqdm-progressbar">
 <h1>plugins.h_tqdm.ProgressBar<a class="headerlink" href="#plugins-h-tqdm-progressbar" title="Link to this heading">¶</a></h1>
 <p>Provides a progress bar for Apache Hamilton execution. Must have <cite>tqdm</cite> installed to use it:</p>
-<p><cite>pip install sf-hamilton[tqdm]</cite> (use quotes if using zsh)</p>
+<p><cite>pip install apache-hamilton[tqdm]</cite> (use quotes if using zsh)</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="hamilton.plugins.h_tqdm.ProgressBar">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.plugins.h_tqdm.</span></span><span class="sig-name descname"><span class="pre">ProgressBar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">desc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Graph</span> <span class="pre">execution'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_node_name_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.plugins.h_tqdm.ProgressBar" title="Link to this definition">¶</a></dt>
 <dd><p>An adapter that uses tqdm to show progress bars for the graph execution.</p>
 <p>Note: you need to have tqdm installed for this to work.
 If you don’t have it installed, you can install it with <cite>pip install tqdm</cite>
-(or <cite>pip install sf-hamilton[tqdm]</cite> – use quotes if you’re using zsh).</p>
+(or <cite>pip install apache-hamilton[tqdm]</cite> – use quotes if you’re using zsh).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.plugins</span><span class="w"> </span><span class="kn">import</span> <span class="n">h_tqdm</span>
 
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
@@ -588,7 +590,7 @@ the set of nodes to execute. Delegates to the interface method.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.plugins.h_tqdm.ProgressBar.run_after_graph_execution">
-<span class="sig-name descname"><span class="pre">run_after_graph_execution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">future_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.plugins.h_tqdm.ProgressBar.run_after_graph_execution" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_after_graph_execution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">future_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.plugins.h_tqdm.ProgressBar.run_after_graph_execution" title="Link to this definition">¶</a></dt>
 <dd><p>This is run after graph execution. This allows you to do anything you want after the graph executes,
 knowing the results of the execution/any errors.</p>
 <dl class="field-list simple">
